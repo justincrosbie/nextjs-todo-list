@@ -1,7 +1,7 @@
 export type Json =
   | string
   | number
-  | boolean
+  | number
   | null
   | { [key: string]: Json }
   | Json[]
@@ -9,26 +9,31 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
-      todos: {
+      questions: {
         Row: {
           id: number
           inserted_at: string
-          is_complete: boolean | null
-          task: string | null
+          updated_at: string
+          likes: number | null
+          content: string | null
+          answer: string | null
           user_id: string
         }
         Insert: {
           id?: number
           inserted_at?: string
-          is_complete?: boolean | null
-          task?: string | null
+          updated_at?: string
+          likes?: number | null
+          content?: string | null
           user_id: string
         }
         Update: {
           id?: number
           inserted_at?: string
-          is_complete?: boolean | null
-          task?: string | null
+          updated_at?: string
+          likes?: number | null
+          content?: string | null
+          answer?: string | null
           user_id?: string
         }
       }

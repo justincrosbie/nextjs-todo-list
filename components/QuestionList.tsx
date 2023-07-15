@@ -2,52 +2,52 @@ import { Database } from '@/lib/schema'
 import { Session, useSupabaseClient } from '@supabase/auth-helpers-react'
 import { useEffect, useState } from 'react'
 
-type Todos = Database['public']['Tables']['todos']['Row']
+type Questions = Database['public']['Tables']['questions']['Row']
 
-export default function TodoList({ session }: { session: Session }) {
+export default function QuestionList({ session }: { session: Session }) {
   const supabase = useSupabaseClient<Database>()
-  const [todos, setTodos] = useState<Todos[]>([])
-  const [newTaskText, setNewTaskText] = useState('')
+  const [questions, setQuestions] = useState<Questions[]>([])
+  const [newContentText, setNewContentText] = useState('')
   const [errorText, setErrorText] = useState('')
 
   const user = session.user
 
   useEffect(() => {
-    const fetchTodos = async () => {
-      const { data: todos, error } = await supabase
-        .from('todos')
+    const fetchQuestions = async () => {
+      const { data: questions, error } = await supabase
+        .from('questions')
         .select('*')
         .order('id', { ascending: true })
 
       if (error) console.log('error', error)
-      else setTodos(todos)
+      else setQuestions(questions)
     }
 
-    fetchTodos()
+    fetchQuestions()
   }, [supabase])
 
-  const addTodo = async (taskText: string) => {
-    let task = taskText.trim()
-    if (task.length) {
-      const { data: todo, error } = await supabase
-        .from('todos')
-        .insert({ task, user_id: user.id })
+  const addQuestion = async (contentText: string) => {
+    let content = contentText.trim()
+    if (content.length) {
+      const { data: question, error } = await supabase
+        .from('questions')
+        .insert({ content, user_id: user.id })
         .select()
         .single()
 
       if (error) {
         setErrorText(error.message)
       } else {
-        setTodos([...todos, todo])
-        setNewTaskText('')
+        setQuestions([...questions, question])
+        setNewContentText('')
       }
     }
   }
 
-  const deleteTodo = async (id: number) => {
+  const deleteQuestion = async (id: number) => {
     try {
-      await supabase.from('todos').delete().eq('id', id).throwOnError()
-      setTodos(todos.filter((x) => x.id != id))
+      await supabase.from('questions').delete().eq('id', id).throwOnError()
+      setQuestions(questions.filter((x) => x.id != id))
     } catch (error) {
       console.log('error', error)
     }
@@ -55,11 +55,11 @@ export default function TodoList({ session }: { session: Session }) {
 
   return (
     <div className="w-full">
-      <h1 className="mb-12">Todo List.</h1>
+      <h1 className="mb-12">Question List.</h1>
       <form
         onSubmit={(e) => {
           e.preventDefault()
-          addTodo(newTaskText)
+          addQuestion(newContentText)
         }}
         className="flex gap-2 my-2"
       >
@@ -67,10 +67,10 @@ export default function TodoList({ session }: { session: Session }) {
           className="rounded w-full p-2"
           type="text"
           placeholder="make coffee"
-          value={newTaskText}
+          value={newContentText}
           onChange={(e) => {
             setErrorText('')
-            setNewTaskText(e.target.value)
+            setNewContentText(e.target.value)
           }}
         />
         <button className="btn-black" type="submit">
@@ -80,8 +80,8 @@ export default function TodoList({ session }: { session: Session }) {
       {!!errorText && <Alert text={errorText} />}
       <div className="bg-white shadow overflow-hidden rounded-md">
         <ul>
-          {todos.map((todo) => (
-            <Todo key={todo.id} todo={todo} onDelete={() => deleteTodo(todo.id)} />
+          {questions.map((question) => (
+            <Question key={question.id} question={question} onDelete={() => deleteQuestion(question.id)} />
           ))}
         </ul>
       </div>
@@ -89,21 +89,22 @@ export default function TodoList({ session }: { session: Session }) {
   )
 }
 
-const Todo = ({ todo, onDelete }: { todo: Todos; onDelete: () => void }) => {
+const Question = ({ question, onDelete }: { question: Questions; onDelete: () => void }) => {
   const supabase = useSupabaseClient<Database>()
-  const [isCompleted, setIsCompleted] = useState(todo.is_complete)
+  const [isCompleted, setIsCompleted] = useState(question.likes)
 
+  const likesCount = question.likes || 0
   const toggle = async () => {
     try {
       const { data } = await supabase
-        .from('todos')
-        .update({ is_complete: !isCompleted })
-        .eq('id', todo.id)
+        .from('questions')
+        .update({ likes: likesCount + 1 })
+        .eq('id', question.id)
         .throwOnError()
         .select()
         .single()
 
-      if (data) setIsCompleted(data.is_complete)
+      if (data) setIsCompleted(data.likes)
     } catch (error) {
       console.log('error', error)
     }
@@ -113,7 +114,7 @@ const Todo = ({ todo, onDelete }: { todo: Todos; onDelete: () => void }) => {
     <li className="w-full block cursor-pointer hover:bg-gray-200 focus:outline-none focus:bg-gray-200 transition duration-150 ease-in-out">
       <div className="flex items-center px-4 py-4 sm:px-6">
         <div className="min-w-0 flex-1 flex items-center">
-          <div className="text-sm leading-5 font-medium truncate">{todo.task}</div>
+          <div className="text-sm leading-5 font-medium truncate">{question.content}</div>
         </div>
         <div>
           <input
