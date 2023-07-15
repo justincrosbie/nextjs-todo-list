@@ -74,3 +74,4 @@ create policy "Individuals can delete their own todos." on todos for
 
 Supabase is open source. We'd love for you to follow along and get involved at https://github.com/supabase/supabase
 # nextjs-todo-list
+# nextjs-todo-list
