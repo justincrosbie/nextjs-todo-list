@@ -1,7 +1,12 @@
-/** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ['./components/**/*.{js,ts,jsx,tsx}', './pages/**/*.{js,ts,jsx,tsx}'],
-  theme: {
+  content: [
+    './components/**/*.{js,ts,jsx,tsx}', 
+    './pages/**/*.{js,ts,jsx,tsx}', 
+    './app/**/*.{js,ts,jsx,tsx,mdx}',
+    'node_modules/flowbite-react/**/*.{js,jsx,ts,tsx}'
+  ],
+darkMode: 'class',
+theme: {
     extend: {
       colors: {
         'accent-1': '#333',
@@ -9,5 +14,7 @@ module.exports = {
     },
   },
   variants: {},
-  plugins: [],
+  plugins: [
+    require('flowbite/plugin')
+  ],
 }

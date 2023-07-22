@@ -15,6 +15,7 @@ export interface Database {
           inserted_at: string
           updated_at: string
           likes: number | null
+          views: number | null
           content: string | null
           answer: string | null
           user_id: string
@@ -24,6 +25,7 @@ export interface Database {
           inserted_at?: string
           updated_at?: string
           likes?: number | null
+          views?: number | null
           content?: string | null
           user_id: string
         }
@@ -32,6 +34,7 @@ export interface Database {
           inserted_at?: string
           updated_at?: string
           likes?: number | null
+          views?: number | null
           content?: string | null
           answer?: string | null
           user_id?: string
