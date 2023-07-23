@@ -4,6 +4,7 @@ import { Database } from '@/lib/schema'
 import { Session, useSupabaseClient } from '@supabase/auth-helpers-react'
 import { useEffect, useState } from 'react'
 import { Button, Card } from 'flowbite-react';
+import { Alert } from "flowbite-react";
 
 type Questions = Database['public']['Tables']['questions']['Row']
 
@@ -22,7 +23,8 @@ export default function QuestionList() {
         .select('*')
         .order('id', { ascending: true })
 
-      if (error) console.log('error', error)
+      if (error) 
+      <Alert color="info">There was an error!: {error.message}</Alert>
       else setQuestions(questions)
     }
 
@@ -59,7 +61,7 @@ export default function QuestionList() {
 
   return (
     <div className="w-full">
-      {!!errorText && <Alert text={errorText} />}
+      {!!errorText && <Alert>{errorText}</Alert>}
       <div className="bg-white shadow overflow-hidden rounded-md">
         <ul>
           {questions.map((question) => (
@@ -104,7 +106,7 @@ const Question = ({ question, onDelete }: { question: Questions; onDelete: () =>
           {question.content}
         </h5>
         <p className="font-normal text-gray-700 dark:text-gray-400">
-          Maybe this is awesome: {question.answer}
+          {question.answer}
         </p>
         <Button>
         <p>
@@ -134,10 +136,3 @@ const Question = ({ question, onDelete }: { question: Questions; onDelete: () =>
 </li> 
 
 */}
-
-
-const Alert = ({ text }: { text: string }) => (
-  <div className="rounded-md bg-red-100 p-4 my-3">
-    <div className="text-sm leading-5 text-red-700">{text}</div>
-  </div>
-)
