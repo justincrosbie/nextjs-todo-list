@@ -5,6 +5,7 @@ import { Session, useSupabaseClient } from '@supabase/auth-helpers-react'
 import { useEffect, useState } from 'react'
 import { Button, Card } from 'flowbite-react';
 import { Alert } from "flowbite-react";
+import Link from 'next/link';
 
 type Questions = Database['public']['Tables']['questions']['Row']
 
@@ -15,12 +16,12 @@ export default function QuestionList() {
   const [newContentText, setNewContentText] = useState('')
   const [errorText, setErrorText] = useState('')
 
-
   useEffect(() => {
     const fetchQuestions = async () => {
       const { data: questions, error } = await supabase
         .from('questions')
         .select('*')
+        .not('answer', 'is', null)
         .order('id', { ascending: true })
 
       if (error) 
@@ -76,6 +77,7 @@ export default function QuestionList() {
 const Question = ({ question, onDelete }: { question: Questions; onDelete: () => void }) => {
   const supabase = useSupabaseClient<Database>()
   const [isCompleted, setIsCompleted] = useState(question.likes)
+  const [toggleAnswer, setToggleAnswer] = useState(false);
 
   const likesCount = question.likes || 0
   const toggle = async () => {
@@ -94,26 +96,26 @@ const Question = ({ question, onDelete }: { question: Questions; onDelete: () =>
     }
   }
 
+  function doToggleAnswer() {
+    setToggleAnswer(!toggleAnswer);
+  } 
+
   return (
     
-
 <li className="w-full block cursor-pointer hover:bg-gray-200 focus:outline-none focus:bg-gray-200 transition duration-150 ease-in-out p-4">
+  <Link href={`/question/${question.id}`}>
       <Card 
       imgAlt="Meaningful alt text for an image that is not purely decorative"
       imgSrc="https://random.imagecdn.app/300/200"
-      className="w-full h-full" href="#">
+      className="w-full h-full">
         <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
           {question.content}
         </h5>
         <p className="font-normal text-gray-700 dark:text-gray-400">
           {question.answer}
         </p>
-        <Button>
-        <p>
-          Read more
-        </p>
-      </Button>
       </Card>
+      </Link>
   </li>
   )
 }

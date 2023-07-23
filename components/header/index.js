@@ -1,9 +1,5 @@
-import Image from 'next/image'
-import Link from 'next/link'
-import { Navbar } from "flowbite-react";
+import { Button, Navbar } from 'flowbite-react';
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react'
-
-import logo from './logo.png'
 
 export default function SiteHeader() {
 
@@ -27,16 +23,16 @@ export default function SiteHeader() {
             Echoes into space
           </span>
         </Navbar.Brand>
-        <Navbar.Toggle />
+        <div className="flex gap-3 md:order-2">
+          <Button href="/askquestion">Ask a Question</Button>
+          <Navbar.Toggle />
+        </div>
         <Navbar.Collapse>
           <Navbar.Link
             href="/"
             active={true}
           >
             Home
-          </Navbar.Link>
-          <Navbar.Link href="/askquestion">
-          Ask a Question
           </Navbar.Link>
 
           <Navbar.Link href="/signout" >
@@ -59,18 +55,9 @@ export default function SiteHeader() {
             Echoes into space
           </span>
         </Navbar.Brand>
-        <Navbar.Toggle />
-        <Navbar.Collapse>
-          <Navbar.Link
-            href="/"
-            active={true}
-          >
-            Home
-          </Navbar.Link>
-          <Navbar.Link href="/askquestion">
-          Ask a Question
-          </Navbar.Link>
-        </Navbar.Collapse>
+        <div className="flex gap-3 md:order-2">
+          <Button href="/askquestion">Ask a Question</Button>
+        </div>
       </Navbar>      
     )
       )
