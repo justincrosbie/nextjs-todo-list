@@ -17,7 +17,7 @@ const AskQuestion = () => {
     const [question, setQuestion] = useState<Question>()
 
     const { questionId } = router.query
-
+    const questionIdStr = questionId as string
 
     return (
         <div className="w-full h-full bg-gray-200">
@@ -38,7 +38,7 @@ const AskQuestion = () => {
             style={{ minWidth: 250, maxWidth: 600, margin: 'auto' }}
           >
             {questionId ? 
-            <QuestionView questionId={questionId} />
+            <QuestionView questionId={questionIdStr} />
             : <Alert>No Question!</Alert>}
           </div>
         )}

@@ -7,7 +7,7 @@ import { Auth, ThemeSupa } from '@supabase/auth-ui-react'
 
 type Question = Database['public']['Tables']['questions']['Row']
 
-export default function QuestionView({ questionId }: { questionId?: string }) {
+export default function QuestionView({ questionId }: { questionId: string }) {
   const session = useSession()
   const supabase = useSupabaseClient<Database>()
   const [question, setQuestion] = useState<Question>()
