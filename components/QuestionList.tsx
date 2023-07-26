@@ -15,6 +15,8 @@ export default function QuestionList() {
   const [questions, setQuestions] = useState<Questions[]>([])
   const [newContentText, setNewContentText] = useState('')
   const [errorText, setErrorText] = useState('')
+  const [imgSrc, setImgSrc] = useState('https://random.imagecdn.app/300/200')
+  
 
   useEffect(() => {
     const fetchQuestions = async () => {
@@ -65,19 +67,33 @@ export default function QuestionList() {
       {!!errorText && <Alert>{errorText}</Alert>}
       <div className="bg-white shadow overflow-hidden rounded-md">
         <ul>
-          {questions.map((question) => (
-            <Question key={question.id} question={question} onDelete={() => likeQuestion(question.id, question.likes || 0)} />
-          ))}
+          {questions.map(
+              (question) => 
+              <Question key={question.id} question={question} imgSrc={imgSrc} />
+              
+          )}
         </ul>
       </div>
     </div>
   )
 }
 
-const Question = ({ question, onDelete }: { question: Questions; onDelete: () => void }) => {
+const Question = ({ question, imgSrc }: { question: Questions; imgSrc: string }) => {
   const supabase = useSupabaseClient<Database>()
   const [isCompleted, setIsCompleted] = useState(question.likes)
   const [toggleAnswer, setToggleAnswer] = useState(false);
+  const [redirectedImgSrc, setRedirectedImgSrc] = useState('');
+  
+  useEffect(() => {
+    const fetchRedirectedImage = async () => {
+      const fetchImg = await fetch('https://random.imagecdn.app/300/200');
+
+      setRedirectedImgSrc(fetchImg.url)
+    }
+
+    fetchRedirectedImage()
+  }, [imgSrc])
+
 
   const likesCount = question.likes || 0
   const toggle = async () => {
@@ -96,6 +112,10 @@ const Question = ({ question, onDelete }: { question: Questions; onDelete: () =>
     }
   }
 
+  async function getRedirectedImgUrl() {
+    return await fetch('https://random.imagecdn.app/300/200');
+  }
+
   function doToggleAnswer() {
     setToggleAnswer(!toggleAnswer);
   } 
@@ -106,7 +126,7 @@ const Question = ({ question, onDelete }: { question: Questions; onDelete: () =>
   <Link href={`/question/${question.id}`}>
       <Card 
       imgAlt="Meaningful alt text for an image that is not purely decorative"
-      imgSrc="https://random.imagecdn.app/300/200"
+      imgSrc={redirectedImgSrc}
       className="w-full h-full">
         <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
           {question.content}
