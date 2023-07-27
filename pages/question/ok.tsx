@@ -1,9 +1,15 @@
 
 import { Alert, Button, Card } from 'flowbite-react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 const AskQuestionOk = () => {
 
+  const router = useRouter()
+
+  function gotoQuestions() {
+    router.push('/')
+  }
 
     return (
         <div className="w-full h-full bg-gray-200">
@@ -19,10 +25,12 @@ const AskQuestionOk = () => {
             Your question has been submitted! I&apos;ll reply in due course.....might be an hour, might be a week. Sit tight ;)
             </p>
 
-            <Button>
-              <Link href={'/'}>
+            <Button
+              onClick={() => {
+                gotoQuestions()
+              }}
+            >
                 <div className="flex gap-3 md:order-2">Return to question list</div>
-              </Link>
             </Button>
           </Card>
           </div>
