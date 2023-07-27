@@ -35,7 +35,7 @@ const AskQuestionOk = () => {
             </p>
 
             <p className="font-normal text-gray-700 dark:text-gray-400">
-            I have a lot of life experience. And I have read a lot. And most importantly, I have come to some realisations. Mostly due to transformations that I experienced over certain periods in my live, that have caused me to grow.
+            I have a lot of life experience. And I have read a lot. And most importantly, I have come to some realisations. Mostly due to transformations that I experienced over certain periods in my life, that have caused me to grow.
             </p>
 
             <p className="font-normal text-gray-700 dark:text-gray-400">
