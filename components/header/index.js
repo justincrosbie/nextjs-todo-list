@@ -34,7 +34,15 @@ export default function SiteHeader() {
           >
             Home
           </Navbar.Link>
-
+          <Navbar.Link href="/about" >
+          About
+          </Navbar.Link>
+          <Navbar.Link href="/" >
+          The Questions
+          </Navbar.Link>
+          <Navbar.Link href="/faq" >
+          FAQ
+          </Navbar.Link>
           <Navbar.Link href="/signout" >
           Sign out
           </Navbar.Link>
@@ -57,7 +65,25 @@ export default function SiteHeader() {
         </Navbar.Brand>
         <div className="flex gap-3 md:order-2">
           <Button href="/askquestion">Ask a Question</Button>
+          <Navbar.Toggle />
         </div>
+        <Navbar.Collapse>
+          <Navbar.Link
+            href="/"
+            active={true}
+          >
+            Home
+          </Navbar.Link>
+          <Navbar.Link href="/about" >
+          About
+          </Navbar.Link>
+          <Navbar.Link href="/" >
+          The Questions
+          </Navbar.Link>
+          <Navbar.Link href="/faq" >
+          FAQ
+          </Navbar.Link>
+        </Navbar.Collapse>
       </Navbar>      
     )
       )
