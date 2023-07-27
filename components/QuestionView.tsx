@@ -12,6 +12,7 @@ export default function QuestionView({ questionId }: { questionId: string }) {
   const supabase = useSupabaseClient<Database>()
   const [question, setQuestion] = useState<Question>()
   const [errorText, setErrorText] = useState('')
+  const [infoText, setInfoText] = useState('')
 
   useEffect(() => {
     const fetchQuestion = async () => {
@@ -52,6 +53,7 @@ export default function QuestionView({ questionId }: { questionId: string }) {
           setErrorText(error.message)
         }
       } else {
+        setInfoText('Thanks, glad you liked!')
       }
     }
   }
@@ -104,7 +106,8 @@ export default function QuestionView({ questionId }: { questionId: string }) {
       </div>
       )}
 
-      {!!errorText && <Alert color="red">{errorText}</Alert>}
+{!!errorText && <Alert color="red">{errorText}</Alert>}
+{!!infoText && <Alert color="green">{infoText}</Alert>}
     </div>
   )
 }
