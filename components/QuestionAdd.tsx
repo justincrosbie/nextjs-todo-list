@@ -2,6 +2,7 @@ import { Database } from '@/lib/schema'
 import { Session, useSupabaseClient } from '@supabase/auth-helpers-react'
 import { useEffect, useState } from 'react'
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 type Questions = Database['public']['Tables']['questions']['Row']
 
@@ -10,10 +11,12 @@ export default function QuestionAdd({ session }: { session: Session }) {
   const [questions, setQuestions] = useState<Questions[]>([])
   const [newContentText, setNewContentText] = useState('')
   const [errorText, setErrorText] = useState('')
+  const router = useRouter()
 
   const user = session.user
 
   const addQuestion = async (contentText: string) => {
+    
     let content = contentText.trim()
     if (content.length) {
       const { data: question, error } = await supabase
@@ -27,6 +30,7 @@ export default function QuestionAdd({ session }: { session: Session }) {
       } else {
         setQuestions([...questions, question])
         setNewContentText('')
+        router.push(`/question/ok`)
       }
     }
   }

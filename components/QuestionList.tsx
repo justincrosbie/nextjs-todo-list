@@ -131,7 +131,7 @@ const Question = ({ question, imgSrc }: { question: Questions; imgSrc: string })
         <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
           {question.content}
         </h5>
-        <p className="font-normal text-gray-700 dark:text-gray-400">
+        <p className="font-normal text-gray-700 dark:text-gray-400 line-clamp-2">
           {question.answer}
         </p>
       </Card>
