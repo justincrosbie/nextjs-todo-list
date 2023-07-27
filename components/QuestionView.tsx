@@ -49,8 +49,10 @@ export default function QuestionView({ questionId }: { questionId: string }) {
       if (error) {
         if (error.message.includes('duplicate key value violates unique constraint')) {
           setErrorText('You already liked this question')
+          setInfoText('')
         } else {
           setErrorText(error.message)
+          setInfoText('')
         }
       } else {
         setInfoText('Thanks, glad you liked!')
