@@ -16,8 +16,6 @@ export default function QuestionView({ questionId }: { questionId: string }) {
   useEffect(() => {
     const fetchQuestion = async () => {
 
-
-      console.log('getting questionList')      
       const { data: questionList, error } = await supabase
         .from('questions')
         .select('*')
@@ -25,9 +23,8 @@ export default function QuestionView({ questionId }: { questionId: string }) {
         .limit(1)
         .single()
 
-        console.log('questionList', questionList)
       if (error)  
-        <Alert color="info">There was an error!: {error.message}</Alert>
+        <Alert color="info">There was an error!: <br></br> {error.message}</Alert>
       else {
         setQuestion(questionList);
       }
@@ -39,14 +36,25 @@ export default function QuestionView({ questionId }: { questionId: string }) {
 
   const user = session?.user
 
-  const likeQuestion = async (id?: number, likes?: number) => {
-  try {
-    await supabase.from('questions').update({likes: likes || 0 + 1}).eq('id', id).throwOnError()
-  } catch (error) {
-    console.log('error', error)
-  }
-}
+  const likeQuestion = async () => {
+    
+    if ( user) {
+      const { data: question_like, error } = await supabase
+        .from('question_likes')
+        .insert({ user_id: user.id, question_id: questionId })
+        .select()
+        .single()
 
+      if (error) {
+        if (error.message.includes('duplicate key value violates unique constraint')) {
+          setErrorText('You already liked this question')
+        } else {
+          setErrorText(error.message)
+        }
+      } else {
+      }
+    }
+  }
 
   return (
     <div className="w-full h-full bg-gray-200">
@@ -82,7 +90,7 @@ export default function QuestionView({ questionId }: { questionId: string }) {
             <Button
               onClick={() => {
                 setErrorText('')
-                likeQuestion(question?.id, question?.likes || 0)
+                likeQuestion()
               }}
             >
               <div className="flex gap-3 md:order-2">Click if you like! 
@@ -96,7 +104,7 @@ export default function QuestionView({ questionId }: { questionId: string }) {
       </div>
       )}
 
-      {!!errorText && <Alert>errorText</Alert>}
+      {!!errorText && <Alert color="red">{errorText}</Alert>}
     </div>
   )
 }
